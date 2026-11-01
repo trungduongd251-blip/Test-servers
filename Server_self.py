@@ -28,7 +28,7 @@ def handle_client(conn,addr):
                 break
             
             try:
-            msg_length = int(header)
+                msg_length = int(header)
             except ValueError:
                 print(f"[REJECTED] {addr} sent a bad header")
                 break
@@ -56,15 +56,19 @@ def handle_client(conn,addr):
 
    
         
-
 def start():
     server.listen()
     print(f"[LISTENING] Server is listening on {SERVER}")
     while True:
         conn, addr = server.accept()
-        thread = threading.Thread(target = handle_client, args = (conn, addr))
+
+        if threading.active_count() - 1 >= MAX_CLIENTS:
+            print(f"[FULL] refused {addr}")
+            conn.close()
+            continue                            # skip the thread creation
+
+        thread = threading.Thread(target=handle_client, args=(conn, addr))
         thread.start()
         print(f"[ACTIVE CONNECTION] {threading.active_count() - 1}")
-
 print("[STARTING] server is starting...")
 start()
