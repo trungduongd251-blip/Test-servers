@@ -46,12 +46,12 @@ def handle_client(conn,addr):
         
             print(f"[{addr}]{msg}")
             conn.send("MESSAGE SENT".encode(FORMAT))
-        except socket.timeout:
-            print(f"[TIMEOUT] {addr} was idle too long")
-        except (ConnectionResetError, UnicodeDecodeError):
-            print(f"[ERROR] {addr} sent bad data or dropped")
-        finally:
-            conn.close() 
+    except socket.timeout:
+        print(f"[TIMEOUT] {addr} was idle too long")
+    except (ConnectionResetError, UnicodeDecodeError):
+        print(f"[ERROR] {addr} sent bad data or dropped")
+    finally:
+        conn.close() 
         
 
    
